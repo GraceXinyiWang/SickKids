@@ -72,25 +72,46 @@ unit_changes['PercentageChange'] = ((unit_changes['TodayCount'] - unit_changes['
 # ✅ **Sort and select the top 3 units for display**
 top_units = unit_changes.sort_values(by='TodayCount', ascending=False).head(3)
 
-# ✅ **Assign trend colors**
+# Define colors and images for the three unit cards
+unit_card_colors = ["green", "blue", "red"]
+unit_card_images = ["assets/green.jpg", "assets/blue.jpg", "assets/red.jpg"]
+
+# ✅ **Create unit cards with fixed colors and correct placement of percentage change**
 unit_cards = dbc.Row([
     dbc.Col(
         dbc.Card(
             dbc.CardBody([
                 html.H5(top_units.iloc[i]["UnitCode"], className="card-title"),
                 html.H2(f"{top_units.iloc[i]['TodayCount']:.0f}"),
+
+                # ✅ Percentage change above the image
                 html.P(
-                    f"{'🟢 +' if top_units.iloc[i]['PercentageChange'] > 0 else '🔴 '}{top_units.iloc[i]['PercentageChange']:.2f}%",
-                    style={"color": "green" if top_units.iloc[i]['PercentageChange'] > 0 else "red", "font-weight": "bold"}
-                )
+                    f"{top_units.iloc[i]['PercentageChange']:.2f}%",
+                    style={
+                        "color": unit_card_colors[i],  # Fixed color for each unit
+                        "font-weight": "bold",
+                        "font-size": "18px",
+                        "text-align": "center",
+                        "margin-bottom": "5px"
+                    }
+                ),
+
+                # ✅ Trend image below percentage change
+                html.Div([
+                    html.Img(src=unit_card_images[i], height="30px"),
+                ], style={"display": "flex", "justify-content": "center"}),
+                
             ]), style={
                 "backgroundColor": "rgba(255, 255, 255, 0.5)",  
                 "boxShadow": "2px 2px 10px rgba(0, 0, 0, 0.1)",  
                 "borderRadius": "15px",  
+                "text-align": "center"
             }
         ), width=4
-    ) for i in range(len(top_units))
+    ) for i in range(min(len(top_units), 3))  # Ensure only top 3 units are displayed
 ], className="mb-4")
+
+
 
 # 📊 Create Charts
 fig_units = px.bar(
