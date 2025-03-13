@@ -23,7 +23,6 @@ sidebar = html.Div(
                 dbc.NavLink("Statistics Dashboard", href="/", active="exact"),
                 dbc.NavLink("Forecasting Tool", href="/forecast", active="exact"),
                 dbc.NavLink("Optimization Tool", href="/optimization", active="exact"),
-                dbc.NavLink("Methods Details", href="/methods", active="exact"),
             ],
             vertical=True,
             pills=True,
